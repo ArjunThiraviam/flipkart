@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="mainContainer">
+        <input type="text" class="mainComment" id="mainComment" placeholder="Write a comment">
+        <a href="" class="viewPrevious" >View previous comments</a>
+        <div id="commentSection">
+            <div class="userComments" style="display: none;">
+                <img src="images.png" alt="" class="userImage">
+                <div class="userPost-container">
+                    <div class="userPost">
+                            <strong>User</strong>
+                            <em>Lorem ipsum dolor sit amet, consectetur</em>
+                        </div>
+                        <p class="reply" id="replyButton">Reply</p>
+                        <p class="reply" id="replyButton">Edit</p>
+                        <p class="reply" id="replyButton">Delete</p>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <script>
+        var input = document.getElementById("mainComment");
+        input.addEventListener("keyup", function(event) {
+          if (event.keyCode === 13) {
+           event.preventDefault();
+           var node = document.createElement('div'); 
+           comment = document.getElementById("mainComment").value;
+           node.innerHTML = `
+           <div class="userComments">
+                <img src="images.png" alt="" class="userImage">
+                <div class="userPost-container">
+                    <div class="userPost">
+                            <strong>User</strong>
+                            <em>${comment}</em>
+                        </div>
+                        <span class="reply replyButton" id="replyButton">Reply</span>
+                        <span class="reply editButton" id="editButton">Edit</span>
+                        <span class="reply deleteButton" id="deleteButton">Delete</span>
+                        <input type="text" class="replyText" id="replyText" placeholder="reply to this comment">
+                        <div class="replySection" id="replySection"></div>
+                </div>
+            </div>`;            
+            document.getElementById("commentSection").appendChild(node);
+            replyFunctionality();
+            setLocalStorage();
+            deleteFunctionality();
+          }
+        });
+
+
+        function replyFunctionality() {
+            function appendReplyText() {
+                document.querySelectorAll(".replyText")[0].classList.add("show");
+
+                var replyInput = document.querySelectorAll(".replyText")[0];
+                replyInput.addEventListener("keyup", function(event) {
+                    if (event.keyCode === 13) {
+                    event.preventDefault();
+                    var node = document.createElement('div'); 
+                    comment = document.getElementById("replyText").value;
+                    node.innerHTML = `
+                    <div class="userComments">
+                            <img src="images.png" alt="" class="userImage">
+                            <div class="userPost-container">
+                                <div class="userPost">
+                                        <strong>User</strong>
+                                        <em>${comment}</em>
+                                    </div>
+                                    <span class="reply replyButton" id="replyButton">Reply</span>
+                                    <span class="reply editButton" id="editButton">Edit</span>
+                                    <span class="reply deleteButton" id="deleteButton">Delete</span>
+                                    <input type="text" class="replyText" placeholder="reply to this comment">
+                                    <div  class="replySection"  id="replySection"></div>
+                            </div>
+                        </div>`;            
+                        document.getElementById("replySection").appendChild(node);
+                        document.querySelectorAll(".replyText")[0].classList.remove("show");
+                        replyFunctionality();
+                        setLocalStorage();
+                        deleteFunctionality();
+                    }
+                });
+
+            }
+            document.querySelectorAll(".replyButton")[0].addEventListener("click", appendReplyText);
+        }
+
+
+        function setLocalStorage() {
+            var htmlContents = document.getElementById("commentSection").innerHTML;
+            localStorage.setItem('OurComments', htmlContents);            
+        }
+
+        function getLocalStorage() {
+            var OurComm = localStorage.getItem('OurComments');
+            document.getElementById("commentSection").innerHTML = OurComm;
+        }
+        getLocalStorage();
+
+
+        // function replyFunctionality() {
+
+        // }
+
+        // var deleteButton = document.querySelectorAll(".deleteButton");
+
+        // Array.from(deleteButton).forEach(function(element) {
+        //     element.addEventListener('click', console.log("Hi"));
+        // });
+
+
+        function deleteFunctionality() {
+            [...document.querySelectorAll('.deleteButton')].forEach(function(item) {
+                item.addEventListener('click', function() {
+                    console.log(item.innerHTML);
+                });
+            });
+        }
+
+    </script>
+        
+</body>
+</html>
